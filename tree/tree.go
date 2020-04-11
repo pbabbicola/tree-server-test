@@ -10,13 +10,13 @@ type treeResponse struct {
 	Text string `json:"text"`
 }
 
-type treeHandler struct {
+type Handler struct {
 	index *template.Template
 }
 
 // NewHandler creates a handler for the tree webpage
-func NewHandler(index *template.Template) http.Handler {
-	return &treeHandler{
+func NewHandler(index *template.Template) *Handler {
+	return &Handler{
 		index: index,
 	}
 }
@@ -38,7 +38,7 @@ func formatResponse(tree string) string {
 	return "Please tell me your favorite tree."
 }
 
-func (handler *treeHandler) renderResponse(w http.ResponseWriter, text string) {
+func (handler *Handler) renderResponse(w http.ResponseWriter, text string) {
 	resp := treeResponse{
 		Text: text,
 	}
@@ -49,13 +49,13 @@ func (handler *treeHandler) renderResponse(w http.ResponseWriter, text string) {
 	}
 }
 
-func (handler *treeHandler) getHandle(w http.ResponseWriter, r *http.Request) {
+func (handler *Handler) getHandle(w http.ResponseWriter, r *http.Request) {
 	tree := getFavoriteTree(r)
 	text := formatResponse(tree)
 	handler.renderResponse(w, text)
 }
 
-func (handler *treeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (handler *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		if r.URL.Path != "/" {

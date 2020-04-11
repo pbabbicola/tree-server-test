@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	Addr      = ":8000"
+	Addr      = "localhost:8000"
 	IndexFile = "html/index.html"
 )
 
@@ -20,10 +20,8 @@ func run() error {
 		return fmt.Errorf("parse template: %w", err)
 	}
 
-	mux := http.NewServeMux()
-	mux.Handle("/", tree.NewHandler(index))
-
-	return http.ListenAndServe(Addr, mux)
+	log.Printf("listening at %v\n", Addr)
+	return http.ListenAndServe(Addr, tree.NewHandler(index))
 }
 
 func main() {
